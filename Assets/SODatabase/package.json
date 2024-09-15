@@ -1,0 +1,9 @@
+{
+    "name": "com.mt3zz.sodatabase",
+    "version": "0.1.0",
+    "description": "Database of ScriptableObject for Unity",
+    "displayName": "SODatabase",
+    "unity": "2022.3",
+    "dependencies": {
+    }
+  }

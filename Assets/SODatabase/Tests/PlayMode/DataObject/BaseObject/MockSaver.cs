@@ -1,7 +1,9 @@
-using UnityEngine;
-
-namespace SODatabase.Tests.PlayMode
+namespace SODatabase.Tests.PlayMode.DataObject
 {
+    using ISaver = SODatabase.DataObject.ISaver;
+    using BaseObject = SODatabase.DataObject.BaseObject;
+
+
     internal class MockSaver : ISaver
     {
         public bool IsSaved { get; private set; } = false;

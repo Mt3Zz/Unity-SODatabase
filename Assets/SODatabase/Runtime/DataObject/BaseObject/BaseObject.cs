@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace SODatabase
+namespace SODatabase.DataObject
 {
     internal abstract class BaseObject : ScriptableObject, IEquatable<BaseObject>
     {

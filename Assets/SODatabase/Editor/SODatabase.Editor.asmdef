@@ -1,7 +1,9 @@
 {
     "name": "SODatabase.Editor",
     "rootNamespace": "SODatabase.Editor",
-    "references": [],
+    "references": [
+        "GUID:9f2f29438888aff47805c27fdb7ff16b"
+    ],
     "includePlatforms": [
         "Editor"
     ],

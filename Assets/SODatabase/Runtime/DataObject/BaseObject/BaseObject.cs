@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace SODatabase.DataObject
 {
-    internal abstract class BaseObject : ScriptableObject, IEquatable<BaseObject>
+    public abstract class BaseObject : ScriptableObject, IEquatable<BaseObject>
     {
         public Guid Uuid { get; } = Guid.NewGuid();
 
@@ -21,7 +21,7 @@ namespace SODatabase.DataObject
         }
 
 
-        public void Delete()
+        internal void Delete()
         {
             if (!IsDeleted)
             {
@@ -29,7 +29,7 @@ namespace SODatabase.DataObject
                 UpdateRecordInfo(); // •ÏX—š—ğ‚ğXV
             }
         }
-        public void Restore()
+        internal void Restore()
         {
             if (IsDeleted)
             {
@@ -39,11 +39,11 @@ namespace SODatabase.DataObject
         }
 
 
-        public void Save(ISaver saver)
+        internal void Save(ISaver saver)
         {
             saver.Save(this);
         }
-        public void Load (ISaver saver)
+        internal void Load (ISaver saver)
         {
             saver.Load(this);
         }

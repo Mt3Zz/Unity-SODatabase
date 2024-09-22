@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:ScrollView horizontal-scroller-visibility="Hidden">
+        <ui:VisualElement name="default-inspector" />
+        <ui:Foldout text="Database Infomation" name="database-information" value="false" />
+    </ui:ScrollView>
+</ui:UXML>

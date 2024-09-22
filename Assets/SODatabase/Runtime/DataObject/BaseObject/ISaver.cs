@@ -1,6 +1,6 @@
 namespace SODatabase.DataObject
 {
-    internal interface ISaver
+    public interface ISaver
     {
         void Save(BaseObject baseObject);
         void Load(BaseObject baseObject);

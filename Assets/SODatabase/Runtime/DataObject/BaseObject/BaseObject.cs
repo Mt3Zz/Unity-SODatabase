@@ -5,7 +5,9 @@ namespace SODatabase.DataObject
 {
     public abstract class BaseObject : ScriptableObject, IEquatable<BaseObject>
     {
-        public ObjectId Id { get; private set; }
+        public ObjectId Id => _id;
+        [SerializeField]
+        private ObjectId _id;
 
         internal Guid Uuid { get; } = Guid.NewGuid();
 
@@ -25,7 +27,7 @@ namespace SODatabase.DataObject
 
         internal void SetId(ObjectId id)
         {
-            Id = id;
+            _id = id;
         }
 
 

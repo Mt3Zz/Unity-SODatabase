@@ -1,28 +1,23 @@
 using System;
+using UnityEngine;
 
 namespace SODatabase.DataObject
 {
+    [Serializable]
     public struct ObjectId : IEquatable<ObjectId>
     {
-        public int Id => _id;
-        private int _id;
-
         public string Name => _name;
+        [SerializeField]
         private string _name;
 
 
-        internal ObjectId(int id, string name)
+        internal ObjectId(string name)
         {
-            _id = id;
             _name = name;
         }
 
 
 #if UNITY_EDITOR
-        internal void SetIdForEditor(int id)
-        {
-            _id = id;
-        }
         internal void SetNameForEditor(string name)
         {
             _name = name;
@@ -32,7 +27,7 @@ namespace SODatabase.DataObject
 
         public bool Equals(ObjectId other)
         {
-            return Id == other.Id && Name == other.Name;
+            return Name == other.Name;
         }
 
         public override bool Equals(object obj)
@@ -42,7 +37,7 @@ namespace SODatabase.DataObject
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Id, Name);
+            return HashCode.Combine(Name);
         }
     }
 }

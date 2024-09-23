@@ -13,7 +13,7 @@ namespace SODatabase.Tests.PlayMode.DataObject
         {
             // Arrange
             var obj = ScriptableObject.CreateInstance<TestObject>();
-            var id = new SODatabase.DataObject.ObjectId(0, "Test");
+            var id = new SODatabase.DataObject.ObjectId("Test");
 
 
             // Act
@@ -28,8 +28,8 @@ namespace SODatabase.Tests.PlayMode.DataObject
         {
             // Arrange
             var obj = ScriptableObject.CreateInstance<TestObject>();
-            var id1 = new SODatabase.DataObject.ObjectId(0, "Test1");
-            var id2 = new SODatabase.DataObject.ObjectId(0, "Test2");
+            var id1 = new SODatabase.DataObject.ObjectId("Test1");
+            var id2 = new SODatabase.DataObject.ObjectId("Test2");
 
 
             // Act

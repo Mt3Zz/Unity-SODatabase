@@ -5,19 +5,27 @@ namespace SODatabase.DataObject
 {
     public abstract class BaseObject : ScriptableObject, IEquatable<BaseObject>
     {
-        public Guid Uuid { get; } = Guid.NewGuid();
+        public ObjectId Id { get; private set; }
 
-        public DateTime CreatedAt { get; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
+        internal Guid Uuid { get; } = Guid.NewGuid();
 
-        public bool IsDeleted { get; private set; } = false;
-        public int Version { get; private set; } = 1;
+        internal DateTime CreatedAt { get; } = DateTime.UtcNow;
+        internal DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
+
+        internal bool IsDeleted { get; private set; } = false;
+        internal int Version { get; private set; } = 1;
 
 
         protected void UpdateRecordInfo()
         {
             UpdatedAt = DateTime.UtcNow;
             Version++;
+        }
+
+
+        internal void SetId(ObjectId id)
+        {
+            Id = id;
         }
 
 

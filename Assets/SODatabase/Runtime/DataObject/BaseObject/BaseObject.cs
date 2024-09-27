@@ -7,21 +7,34 @@ namespace SODatabase.DataObject
     {
         public ObjectId Id => _id;
         [SerializeField]
-        private ObjectId _id;
+        private ObjectId _id = default;
 
-        internal Guid Uuid { get; } = Guid.NewGuid();
 
-        internal DateTime CreatedAt { get; } = DateTime.UtcNow;
-        internal DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
+        internal Guid Uuid => Guid.Parse(_uuid);
+        [SerializeField, HideInInspector]
+        private string _uuid = Guid.NewGuid().ToString();
 
-        internal bool IsDeleted { get; private set; } = false;
-        internal int Version { get; private set; } = 1;
+        internal DateTime CreatedAt => DateTime.Parse(_createdAt);
+        [SerializeField, HideInInspector]
+        private string _createdAt = DateTime.UtcNow.ToString();
+
+        internal DateTime UpdatedAt => DateTime.Parse(_updatedAt);
+        [SerializeField, HideInInspector]
+        private string _updatedAt = DateTime.UtcNow.ToString();
+
+        internal bool IsDeleted => _isDeleted;
+        [SerializeField, HideInInspector]
+        private bool _isDeleted = false;
+
+        internal int Version => _version;
+        [SerializeField, HideInInspector]
+        private int _version = 1;
 
 
         protected void UpdateRecordInfo()
         {
-            UpdatedAt = DateTime.UtcNow;
-            Version++;
+            _updatedAt = DateTime.UtcNow.ToString();
+            _version++;
         }
 
 
@@ -35,7 +48,7 @@ namespace SODatabase.DataObject
         {
             if (!IsDeleted)
             {
-                IsDeleted = true;
+                _isDeleted = true;
                 UpdateRecordInfo(); // 変更履歴を更新
             }
         }
@@ -43,7 +56,7 @@ namespace SODatabase.DataObject
         {
             if (IsDeleted)
             {
-                IsDeleted = false;
+                _isDeleted = false;
                 UpdateRecordInfo(); // 変更履歴を更新
             }
         }

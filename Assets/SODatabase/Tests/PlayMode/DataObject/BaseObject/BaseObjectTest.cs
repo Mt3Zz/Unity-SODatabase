@@ -66,7 +66,7 @@ namespace SODatabase.Tests.PlayMode.DataObject
 
 
             // Act
-            yield return null;
+            yield return new WaitForSeconds(1f);
             obj.Delete();
 
 
@@ -104,7 +104,7 @@ namespace SODatabase.Tests.PlayMode.DataObject
 
 
             // Act
-            yield return null;
+            yield return new WaitForSeconds(1f);
             obj.Restore();
 
 

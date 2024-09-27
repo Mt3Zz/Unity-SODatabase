@@ -4,5 +4,6 @@ namespace SODatabase.Tests.PlayMode.DataObject
 
     internal class TestObject : BaseObject
     {
+        public string TestValue { get; set; } = "TestObject";
     }
 }

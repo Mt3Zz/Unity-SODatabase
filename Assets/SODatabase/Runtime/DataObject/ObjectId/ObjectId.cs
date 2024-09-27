@@ -17,14 +17,6 @@ namespace SODatabase.DataObject
         }
 
 
-#if UNITY_EDITOR
-        internal void SetNameForEditor(string name)
-        {
-            _name = name;
-        }
-#endif
-
-
         public bool Equals(ObjectId other)
         {
             return Name == other.Name;

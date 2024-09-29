@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="preferences" class="preferences--margin">
+        <ui:Label text="SO Database" name="preferences__title" class="preferences__title--size preferences__title--margin" />
+        <ui:VisualElement name="preferences__preferences-field">
+            <ui:VisualElement name="root-folder-preferences" class="preferences-field--margin">
+                <ui:Label text="Root Folder" name="root-folder-preferences__title" class="preferences__subtitle" />
+                <ui:TextField binding-path="_folderPreferences._rootFolder" readonly="true" name="root-folder-preferences__current-folder" />
+                <ui:VisualElement style="flex-direction: row;">
+                    <ui:Button text="Set Root Folder" name="root-folder-preferences__folder-setter" />
+                    <ui:Button text="Initialize Root Folder" name="root-folder-preferences__folder-initializer" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,17 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:ScrollView horizontal-scroller-visibility="Hidden" name="main" style="flex-grow: 1;">
+        <ui:VisualElement name="preference-section">
+            <ui:DropdownField label="Object Type" index="0" name="preference-section__type-selector" />
+        </ui:VisualElement>
+        <ui:VisualElement name="object-section">
+            <ui:ListView show-bound-collection-size="false" virtualization-method="DynamicHeight" name="object-section__list" binding-path="_objects" show-add-remove-footer="true" />
+            <ui:VisualElement style="flex-direction: row;">
+                <ui:DropdownField name="object-section__type-selector" />
+                <ui:Button text="Create New Object" name="object-section__object-creater" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="default-inspector-section">
+            <ui:Foldout text="Default Inspector" name="default-inspector-section__foldout" value="false" style="display: none;" />
+        </ui:VisualElement>
+    </ui:ScrollView>
+</ui:UXML>

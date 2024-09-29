@@ -3,47 +3,70 @@ using UnityEngine;
 
 namespace SODatabase.DataObject
 {
-    internal abstract class BaseObject : ScriptableObject, IEquatable<BaseObject>
+    public abstract class BaseObject : ScriptableObject, IEquatable<BaseObject>
     {
-        public Guid Uuid { get; } = Guid.NewGuid();
+        public ObjectId Id => _id;
+        [SerializeField]
+        private ObjectId _id = default;
 
-        public DateTime CreatedAt { get; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
-        public bool IsDeleted { get; private set; } = false;
-        public int Version { get; private set; } = 1;
+        internal Guid Uuid => Guid.Parse(_uuid);
+        [SerializeField, HideInInspector]
+        private string _uuid = Guid.NewGuid().ToString();
+
+        internal DateTime CreatedAt => DateTime.Parse(_createdAt);
+        [SerializeField, HideInInspector]
+        private string _createdAt = DateTime.UtcNow.ToString();
+
+        internal DateTime UpdatedAt => DateTime.Parse(_updatedAt);
+        [SerializeField, HideInInspector]
+        private string _updatedAt = DateTime.UtcNow.ToString();
+
+        internal bool IsDeleted => _isDeleted;
+        [SerializeField, HideInInspector]
+        private bool _isDeleted = false;
+
+        internal int Version => _version;
+        [SerializeField, HideInInspector]
+        private int _version = 1;
 
 
         protected void UpdateRecordInfo()
         {
-            UpdatedAt = DateTime.UtcNow;
-            Version++;
+            _updatedAt = DateTime.UtcNow.ToString();
+            _version++;
         }
 
 
-        public void Delete()
+        internal void SetId(ObjectId id)
+        {
+            _id = id;
+        }
+
+
+        internal void Delete()
         {
             if (!IsDeleted)
             {
-                IsDeleted = true;
+                _isDeleted = true;
                 UpdateRecordInfo(); // 変更履歴を更新
             }
         }
-        public void Restore()
+        internal void Restore()
         {
             if (IsDeleted)
             {
-                IsDeleted = false;
+                _isDeleted = false;
                 UpdateRecordInfo(); // 変更履歴を更新
             }
         }
 
 
-        public void Save(ISaver saver)
+        internal void Save(ISaver saver)
         {
             saver.Save(this);
         }
-        public void Load (ISaver saver)
+        internal void Load (ISaver saver)
         {
             saver.Load(this);
         }

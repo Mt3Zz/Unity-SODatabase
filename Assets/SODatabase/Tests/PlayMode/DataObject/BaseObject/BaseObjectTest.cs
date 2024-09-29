@@ -9,6 +9,39 @@ namespace SODatabase.Tests.PlayMode.DataObject
     public class BaseObjectTest
     {
         [Test]
+        public void SetId_CompareSameId_True()
+        {
+            // Arrange
+            var obj = ScriptableObject.CreateInstance<TestObject>();
+            var id = new SODatabase.DataObject.ObjectId("Test");
+
+
+            // Act
+            obj.SetId(id);
+
+
+            // Assert
+            Assert.That(obj.Id, Is.EqualTo(id));
+        }
+        [Test]
+        public void SetId_CompareDifferentId_False()
+        {
+            // Arrange
+            var obj = ScriptableObject.CreateInstance<TestObject>();
+            var id1 = new SODatabase.DataObject.ObjectId("Test1");
+            var id2 = new SODatabase.DataObject.ObjectId("Test2");
+
+
+            // Act
+            obj.SetId(id1);
+
+
+            // Assert
+            Assert.That(obj.Id, !Is.EqualTo(id2));
+        }
+
+
+        [Test]
         public void Delete_CallsMethod_IsDeletedIsTrue()
         {
             // Arrange
@@ -33,7 +66,7 @@ namespace SODatabase.Tests.PlayMode.DataObject
 
 
             // Act
-            yield return null;
+            yield return new WaitForSeconds(1f);
             obj.Delete();
 
 
@@ -71,7 +104,7 @@ namespace SODatabase.Tests.PlayMode.DataObject
 
 
             // Act
-            yield return null;
+            yield return new WaitForSeconds(1f);
             obj.Restore();
 
 

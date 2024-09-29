@@ -52,10 +52,16 @@ namespace SODatabase.DataObject
 
 #if UNITY_EDITOR
         // Create a new object and add it to the storage
-        public void CreateObjectForEditor<T>(string path)
-            where T : BaseObject
+        public void CreateObjectForEditor(Type objectType, string path)
         {
-            var obj = CreateInstance(typeof(T)) as BaseObject;
+            if (
+                objectType != typeof(BaseObject) && 
+                !typeof(BaseObject).IsAssignableFrom(objectType)
+                )
+            {
+                throw new ArgumentException($"Type {objectType} is not BaseObject or a subclass of BaseObject.");
+            }
+            var obj = CreateInstance(objectType) as BaseObject;
             if (obj != null)
             {
                 AssetDatabase.CreateAsset(obj, path);

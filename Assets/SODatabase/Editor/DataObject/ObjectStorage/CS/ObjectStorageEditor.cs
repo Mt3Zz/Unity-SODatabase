@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using System;
-using UnityEditor.SceneManagement;
-
 
 namespace SODatabase.Editor
 {
     using Editor = UnityEditor.Editor;
-    using BaseObject = DataObject.BaseObject;
     using ObjectStorage = DataObject.ObjectStorage;
 
 
@@ -25,180 +18,116 @@ namespace SODatabase.Editor
         private VisualTreeAsset _itemLayout = default;
 
 
-        private ObjectStorage _targetInstance => (ObjectStorage)target;
-
-
         public override VisualElement CreateInspectorGUI()
         {
-            //ShowPropertyNames();
-
-
             var root = new VisualElement();
-            if(_layout != null)
+            if (_layout != null)
             {
                 _layout.CloneTree(root);
             }
 
-
-            CreateObjectList(root);
-            CreateDefaultInspector(root);
-
+            CacheVisualElements(root);
+            SetupVisualElements();
 
             return root;
         }
 
 
-        private void CreateObjectList(VisualElement root)
+        // VisualElementフィールドを定義
+        private VisualElement preferenceSection;
+        private DropdownField preferenceSection__typeSelector;
+
+        private VisualElement objectSection;
+        private ListView      objectSection__list;
+        private DropdownField objectSection__typeSelector;
+        private Button        objectSection__objectCreater;
+
+        private VisualElement defaultInspectorSection;
+        private Foldout       defaultInspectorSection__foldout;
+
+        // フィールドをキャッシュ
+        private void CacheVisualElements(VisualElement root)
         {
-            var container = root.Q<VisualElement>("object-list");
-            if (container == null)
+            T FindElementOrCreate<T>(VisualElement container, string name)
+                where T : VisualElement, new()
             {
-                Debug.Log("object-list is null");
-                return;
-            }
-
-
-            CreateObjectListView(container);
-            CreateObjectCreationField(container);
-        }
-        private void CreateObjectListView(VisualElement container)
-        {
-            var list = container.Q<ListView>("object-list__view");
-            if (container == null)
-            {
-                Debug.Log("object-list__view is null");
-                return;
-            }
-
-
-            if(_itemLayout == null)
-            {
-                Debug.Log("_itemLayout is null");
-                return;
-            }
-            list.makeItem = _itemLayout.CloneTree;
-            list.bindItem = (element, index) =>
-            {
-                var field = element.Q<ObjectField>("object-field");
-                if (field == null)
+                T element = container.Q<T>(name);
+                if (element == null)
                 {
-                    Debug.Log("object-field is null");
-                    return;
+                    var msg = ""
+                        + $"{name} is null.\n"
+                        + $"A new instance of {typeof(T)} has been created.\n";
+                    Debug.Log(msg);
+                    element = new T();
                 }
-                var inspector = element.Q<VisualElement>("object-inspector");
-                if (inspector == null)
-                {
-                    Debug.Log("object-inspector is null");
-                    return;
-                }
-                var storage = (ObjectStorage)target;
+                return element;
+            }
 
 
-                field.RegisterValueChangedCallback(evt =>
-                {
-                    var obj = (BaseObject)evt.newValue;
+            preferenceSection = FindElementOrCreate
+                <VisualElement>(
+                root, 
+                "preference-section");
+            preferenceSection__typeSelector = FindElementOrCreate
+                <DropdownField>(
+                preferenceSection, 
+                "preference-section__type-selector");
 
-                    inspector.Clear();
-                    storage.Objects[index] = obj;
 
-                    if (obj != null)
-                    {
-                        inspector.Add(new InspectorElement(obj));
-                    }
-                });
-                field.value = storage.Objects[index];
-            };
-            //*/
+            objectSection = FindElementOrCreate
+                <VisualElement>(
+                root, 
+                "object-section");
+            objectSection__list = FindElementOrCreate
+                <ListView>(
+                objectSection, 
+                "object-section__list");
+            objectSection__typeSelector = FindElementOrCreate
+                <DropdownField>(
+                objectSection, 
+                "object-section__type-selector");
+            objectSection__objectCreater = FindElementOrCreate
+                <Button>(
+                objectSection, 
+                "object-section__object-creater");
+
+
+            defaultInspectorSection = FindElementOrCreate
+                <VisualElement>(
+                root, 
+                "default-inspector-section");
+            defaultInspectorSection__foldout = FindElementOrCreate
+                <Foldout>(
+                defaultInspectorSection, 
+                "default-inspector-section__foldout");
         }
-        private void CreateObjectCreationField(VisualElement container)
+        private void SetupVisualElements()
         {
-            var dropdown = container.Q<DropdownField>("object-list__type-selector");
-            if (dropdown == null)
-            {
-                Debug.Log("object-list__type-selector is null");
-                return;
-            }
-            var button = container.Q<Button>("object-list__addition-button");
-            if(button == null)
-            {
-                Debug.Log("object-list__addition-button is null");
-                return;
-            }
+            var view = new ObjectStorageView((ObjectStorage)target);
 
 
-            var folderPreferences = PackagePreferences.instance.FolderPreferences;
-            var folder = folderPreferences.ItemFolder;
-
-            var subclasses = System.Reflection.Assembly
-                .GetAssembly(typeof(BaseObject))
-                .GetTypes()
-                .Where(x => x.IsSubclassOf(typeof(BaseObject)) && !x.IsAbstract)
-                .ToList();
+            // Preference Section
 
 
-            dropdown.index = -1;
-            dropdown.choices = subclasses
-                .Select(subclass => subclass.Name)
-                .ToList();
-            dropdown.RegisterValueChangedCallback(evt =>
-            {
-                button.SetEnabled(true);
-                folder = folderPreferences.ItemFolder + $"/{evt.newValue}";
-            });
+
+            // Object Section
+            objectSection__list.makeItem = _itemLayout.CloneTree;
+            objectSection__list.bindItem = view.SetupObjectSectionListItem;
+
+            view.SetupObjectSectionTypeSelector(objectSection__typeSelector);
+            view.SetupObjectSectionObjectCreater(objectSection__objectCreater);
+
+            view.AssociateTypeSelecltorWithObjectCreater
+                (objectSection__typeSelector, 
+                objectSection__objectCreater);
 
 
-            button.SetEnabled(false);
-            button.clicked += () =>
-            {
-                folderPreferences.CreateDirectoryRecursively(folder);
-                
-
-                // 保存先のファイルパスを取得
-                var path = EditorUtility.SaveFilePanelInProject(
-                    "Save Item", // 開かれるウィンドウのタイトル
-                    "DataObject", // 入力されている名前
-                    "asset", // 入力されている拡張子
-                    "", // なんだかわからない
-                    folder // 開いたとき表示されるフォルダ
-                    );
-
-                // 選択されたならパスが入っている。キャンセルされたなら入っていない。
-                if (!string.IsNullOrEmpty(path))
-                {
-                    // 保存処理
-                    if (dropdown.index >= 0 && dropdown.index < subclasses.Count)
-                    {
-                        var storage = CreateInstance(subclasses[dropdown.index]) as BaseObject;
-                        AssetDatabase.CreateAsset(storage, path);
-
-                        _targetInstance.Objects.Add(storage);
-                    }
-                }
-            };
-        }
-
-
-        private void CreateDefaultInspector(VisualElement root)
-        {
-            var container = root.Q<Foldout>("default-inspector");
-            if (container == null)
-            {
-                Debug.Log("default-inspector is null");
-                return;
-            }
-
-
-            InspectorElement.FillDefaultInspector(container, serializedObject, this);
-        }
-
-
-        private void ShowPropertyNames()
-        {
-            var iterator = serializedObject.GetIterator();
-            while (iterator.NextVisible(true))
-            {
-                Debug.Log(iterator.propertyPath);
-            }
+            // Default Inspector Section
+            InspectorElement.FillDefaultInspector(
+                defaultInspectorSection__foldout,
+                serializedObject,
+                this
+                );
         }
     }
 }

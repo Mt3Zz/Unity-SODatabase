@@ -16,12 +16,11 @@ namespace SODatabase.Editor
         // Preferencesに追加する場合は、先頭をPreferencesにする
         private const string _settingPath = _settingFolder + _settingName;
 
-
+        
+        // このメソッドによって Project Settings に項目が増える
         /// <summary>
-        /// カスタムパッケージ "Observable Turn-Based Combat" のカスタム設定画面を
-        /// Project Settingsに追加する
+        /// カスタムパッケージの設定画面を Project Settings に追加する
         /// </summary>
-        // このメソッドによってProject Settingsに項目が増える
         [SettingsProvider]
         public static SettingsProvider CreateProvider()
         {

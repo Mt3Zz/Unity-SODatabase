@@ -1,0 +1,40 @@
+.aside--size {
+    max-width: 160px;
+    min-width: 160px;
+}
+
+.aside--border {
+    border-right-color: rgba(0, 0, 0, 0.5);
+    border-right-width: 4px;
+}
+
+.aside__item--margin {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.aside__main--flex-grow {
+    flex-grow: 1;
+}
+
+.aside__caution--text-wrap{
+    white-space: normal;
+}
+
+.aside__storage-list--label-style{
+    margin-left: 20px;
+    -unity-text-align: middle-left;
+}
+
+.main--flex-grow {
+    flex-grow: 1;
+}
+
+.main--margin {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}

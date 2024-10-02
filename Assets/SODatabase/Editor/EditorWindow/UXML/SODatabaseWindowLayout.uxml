@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="root" style="flex-direction: row; flex-grow: 1;">
+        <ui:VisualElement name="aside" class="aside--size aside--border">
+            <ui:ScrollView name="aside__main" horizontal-scroller-visibility="Hidden" class="aside__main--flex-grow aside__item--margin">
+                <ui:Label tabindex="-1" text="There is no storage available to manage. Please add storage in &quot;Preferences&quot;." name="aside__caution" class="aside__caution--text-wrap" />
+            </ui:ScrollView>
+            <ui:VisualElement name="aside__footer" class="aside__item--margin">
+                <ui:Button text="Preferences" name="footer__preferences-link" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:ScrollView name="main" horizontal-scroller-visibility="Hidden" class="main--flex-grow main--margin">
+            <ui:Label text="No sidebar content selected" />
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

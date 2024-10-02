@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
 namespace SODatabase.Editor
 {
+    using ObjectStorage = DataObject.ObjectStorage;
+
+
     [FilePath("ProjectSettings/SODatabase.asset",
         FilePathAttribute.Location.ProjectFolder)]
     internal class PackagePreferences : ScriptableSingleton<PackagePreferences>
@@ -12,6 +16,11 @@ namespace SODatabase.Editor
         public FolderPreferences FolderPreferences => _folderPreferences;
         [SerializeField]
         private FolderPreferences _folderPreferences = new();
+
+
+        public IList<ObjectStorage> DistinctStorages => _storages.Distinct().ToList();
+        [SerializeField]
+        private List<ObjectStorage> _storages = new();
 
 
         internal void Save()
@@ -24,10 +33,10 @@ namespace SODatabase.Editor
     {
         internal string RootFolder => _rootFolder;
         internal string InitialRootFolder => _initialRootFolder;
-        internal string ItemFolder => _rootFolder + "/Items";
-        internal string TemplateFolder => ItemFolder + "/Templates";
-        internal string StorageFolder => ItemFolder + "/Storages";
-        internal string TypeFolder => ItemFolder + "/Types";
+        internal string ItemFolder     => RootFolder + "/Items";
+        internal string TemplateFolder => RootFolder + "/Templates";
+        internal string StorageFolder  => RootFolder + "/Storages";
+        internal string TypeFolder     => RootFolder + "/Types";
 
         [SerializeField]
         private string _rootFolder = _initialRootFolder;
@@ -36,9 +45,9 @@ namespace SODatabase.Editor
 
 
 
+        // そのまま呼び出すと、途中にディレクトリが存在しない場合エラーになる。
         /// <summary>
         /// AssetDatabase.CreateFolderで再帰的にディレクトリを作成する。
-        /// そのまま呼び出すと、途中にディレクトリが存在しない場合エラーになる。
         /// </summary>
         /// <param name="dirPath">"Assets/"からはじまるディレクトリパス</param>
         internal void CreateDirectoryRecursively(string dirPath)

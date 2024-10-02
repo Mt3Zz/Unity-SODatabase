@@ -1,15 +1,27 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:VisualElement name="preferences" class="preferences--margin">
-        <ui:Label text="SO Database" name="preferences__title" class="preferences__title--size preferences__title--margin" />
-        <ui:VisualElement name="preferences__preferences-field">
-            <ui:VisualElement name="root-folder-preferences" class="preferences-field--margin">
-                <ui:Label text="Root Folder" name="root-folder-preferences__title" class="preferences__subtitle" />
-                <ui:TextField binding-path="_folderPreferences._rootFolder" readonly="true" name="root-folder-preferences__current-folder" />
-                <ui:VisualElement style="flex-direction: row;">
-                    <ui:Button text="Set Root Folder" name="root-folder-preferences__folder-setter" />
-                    <ui:Button text="Initialize Root Folder" name="root-folder-preferences__folder-initializer" />
+    <ui:VisualElement name="root">
+        <ui:ScrollView name="main" horizontal-scroller-visibility="Hidden" class="main--margin">
+            <ui:Label text="SO Database" name="main__title" class="main__title--size main__title--margin" />
+            <ui:VisualElement name="folder-path-section" class="main__item--margin">
+                <ui:Label text="Root Folder" name="preference-section__title" class="preference-section__title--font-style" />
+                <ui:VisualElement name="preference-section__main">
+                    <ui:TextField binding-path="_folderPreferences._rootFolder" readonly="true" name="folder-path-section__text-field" />
+                    <ui:VisualElement style="flex-direction: row;">
+                        <ui:Button text="Set Root Folder" name="folder-path-section__path-setter" />
+                        <ui:Button text="Initialize Root Folder" name="folder-path-section__path-initializer" />
+                    </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>
-        </ui:VisualElement>
+            <ui:VisualElement name="managed-storage-section" class="main__item--margin">
+                <ui:Label text="Managed Storages" name="preference-section__title" class="preference-section__title--font-style" />
+                <ui:VisualElement name="preference-section__main">
+                    <ui:ListView name="managed-storage-section__storage-list" virtualization-method="DynamicHeight" show-add-remove-footer="true" show-bound-collection-size="false" />
+                </ui:VisualElement>
+                <ui:VisualElement style="flex-direction: row;">
+                    <ui:Button text="Create New Storage" name="managed-storage-section__storage-creater" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:ScrollView>
     </ui:VisualElement>
+    <ui:VisualElement name="templates" style="display: none;" />
 </ui:UXML>

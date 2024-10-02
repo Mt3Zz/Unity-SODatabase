@@ -1,22 +1,22 @@
-.preferences--margin {
+.main--margin {
     margin-right: 10px;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.preferences__title--size {
+.main__title--size {
     -unity-font-style: bold;
     font-size: 20px;
 }
 
-.preferences__title--margin {
+.main__title--margin {
     margin-bottom: 10px;
 }
 
-.preferences__subtitle {
+.main__item--margin {
+    margin-bottom: 10px;
+}
+
+.preference-section__title--font-style {
     -unity-font-style: bold;
-}
-
-.preferences-field--margin {
-    margin-bottom: 10px;
 }

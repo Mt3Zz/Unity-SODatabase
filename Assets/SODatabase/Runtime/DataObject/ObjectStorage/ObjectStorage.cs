@@ -47,7 +47,7 @@ namespace SODatabase.DataObject
 
         // Preferences
         internal StoragePreferences Preferences => _preferences;
-        private StoragePreferences _preferences = default;
+        private StoragePreferences _preferences = new();
 
 
 #if UNITY_EDITOR

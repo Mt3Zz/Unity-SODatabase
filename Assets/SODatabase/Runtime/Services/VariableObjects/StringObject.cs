@@ -4,7 +4,11 @@ namespace SODatabase.DataObject
 {
     public sealed class StringObject : BaseObject
     {
-        public string Value => _value;
+        public string Value
+        {
+            get { return _value; }
+            internal set { _value = value; }
+        }
         [SerializeField]
         private string _value = "";
     }

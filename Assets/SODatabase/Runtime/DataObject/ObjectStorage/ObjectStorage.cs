@@ -100,13 +100,11 @@ namespace SODatabase.DataObject
             if (obj == null) return false;
             if (obj.GetType() != typeof(T)) return false;
 
-            var isUpdated = controller.Update(obj as T);
+            var isUpdated = controller.UpdateObject(obj as T);
 
-            if (isUpdated) return true;
-            return false;
+            if (!isUpdated) return false;
+            return true;
         }
-
-
     }
     internal class StoragePreferences
     {

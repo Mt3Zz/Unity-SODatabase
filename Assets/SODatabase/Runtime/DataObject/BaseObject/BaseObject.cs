@@ -6,7 +6,7 @@ namespace SODatabase.DataObject
     public abstract class BaseObject : ScriptableObject, IEquatable<BaseObject>
     {
         public ObjectId Id => _id;
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private ObjectId _id = default;
 
 

@@ -103,7 +103,10 @@ namespace SODatabase.Editor
         }
         private void SetupVisualElements()
         {
-            var view = new ObjectStorageView((ObjectStorage)target);
+            var storage = (ObjectStorage)target;
+
+            var view = new ObjectStorageView(storage);
+            var itemView = new StorageItemView(storage, _itemLayout);
 
 
             // Preference Section
@@ -111,8 +114,9 @@ namespace SODatabase.Editor
 
 
             // Object Section
-            objectSection__list.makeItem = _itemLayout.CloneTree;
-            objectSection__list.bindItem = view.SetupObjectSectionListItem;
+            //objectSection__list.makeItem = _itemLayout.CloneTree;
+            //objectSection__list.bindItem = view.SetupObjectSectionListItem;
+            itemView.SetupListView(objectSection__list);
 
             view.SetupObjectSectionTypeSelector(objectSection__typeSelector);
             view.SetupObjectSectionObjectCreater(objectSection__objectCreater);
@@ -126,8 +130,7 @@ namespace SODatabase.Editor
             InspectorElement.FillDefaultInspector(
                 defaultInspectorSection__foldout,
                 serializedObject,
-                this
-                );
+                this);
         }
     }
 }

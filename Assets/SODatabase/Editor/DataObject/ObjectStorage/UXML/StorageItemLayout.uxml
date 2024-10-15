@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="root">
+        <ui:VisualElement name="main">
+            <ui:VisualElement name="selector-section" style="flex-direction: row;">
+                <uie:ObjectField type="SODatabase.DataObject.BaseObject, SODatabase" allow-scene-objects="false" name="selector-section__object" />
+            </ui:VisualElement>
+            <ui:VisualElement name="details-section" style="flex-direction: row;">
+                <ui:VisualElement name="details-section__icon-section" />
+                <ui:VisualElement name="details-section__main" style="flex-grow: 1; margin-left: 10px; margin-right: 10px; align-self: center;" />
+                <ui:VisualElement name="details-section__controller-section" style="align-self: center;">
+                    <ui:Button text="Trash" name="controller-section__trash-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

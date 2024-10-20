@@ -1,0 +1,71 @@
+.root {
+    margin-left: 4px;
+    margin-right: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.header {
+    top: 0;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+}
+
+.header__title {
+    font-size: 24px;
+    -unity-font-style: bold;
+}
+
+.main {
+    margin-left: -10px;
+    padding-right: 10px;
+}
+
+.footer {
+    bottom: 0;
+    margin-top: 10px;
+    flex-shrink: 0;
+}
+
+.card {
+    margin-right: 4px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-left-color: rgba(0, 0, 0, 0.25);
+    border-right-color: rgba(0, 0, 0, 0.25);
+    border-top-color: rgba(0, 0, 0, 0.25);
+    border-bottom-color: rgba(0, 0, 0, 0.25);
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 2px;
+}
+
+.card__title {
+    align-self: center;
+    margin-bottom: 4px;
+    -unity-font-style: bold;
+}
+
+.card__item {
+    margin-bottom: 4px;
+    flex-grow: 1;
+}
+
+.controller-section__item {
+    flex-grow: 1;
+    flex-basis: 0;
+}
+
+.controller-section__item--large {
+    flex-grow: 2;
+}
+
+.object-section__list-selector {
+    left: 25px;
+}

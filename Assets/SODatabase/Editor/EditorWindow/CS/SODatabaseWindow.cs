@@ -1,9 +1,7 @@
 ﻿using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UIElements;
-using NUnit.Framework;
 using UnityEditor.UIElements;
 
 
@@ -65,7 +63,7 @@ namespace SODatabase.Editor
         private VisualElement aside__footer;
         private Button        footer__preferencesLink;
 
-        private ScrollView    main;
+        private VisualElement main;
 
         private void CacheVisualElements(VisualElement root)
         {
@@ -105,7 +103,7 @@ namespace SODatabase.Editor
 
 
             main = FindElementOrCreate
-                <ScrollView>(
+                <VisualElement>(
                 root,
                 "main");
         }
@@ -117,7 +115,7 @@ namespace SODatabase.Editor
         }
 
 
-        private void SetupAsideMain(ScrollView scrollView)
+        private void SetupAsideMain(VisualElement aside)
         {
             var instance = PackagePreferences.instance;
             var storages = instance.DistinctStorages;
@@ -129,7 +127,10 @@ namespace SODatabase.Editor
                 .ToList();
             //Debug.Log(string.Join("\n", distinctTypes));
 
-            if (distinctTypes.Count > 0) scrollView.Clear();
+            if (distinctTypes.Count == 0) return;
+
+
+            aside.Clear();
             foreach (var type in distinctTypes)
             {
                 var container = _asideItemLayout.CloneTree();
@@ -159,11 +160,11 @@ namespace SODatabase.Editor
 
                     element.RegisterCallback<ClickEvent>(evt =>
                     {
-                        ResetMain(source[index]);
+                        RefreshMain(source[index]);
                     });
                 };
 
-                aside__main.Add(container);
+                aside.Add(container);
             }
         }
         private void SetupFooterPreferencesLink(Button button)
@@ -175,12 +176,20 @@ namespace SODatabase.Editor
         }
 
 
-        private void ResetMain(ObjectStorage storage)
+        private void RefreshMain(ScriptableObject obj)
         {
-            if(storage == null) return;
+            if (obj == null) return;
 
             main.Clear();
-            main.Add(new InspectorElement(storage));
+            if (false) // objがエディターを持っている場合の分岐を書きたい
+            {
+                //var container = UnityEditor.Editor.CreateEditor(obj);
+            }
+            else
+            {
+                var container = new InspectorElement(obj);
+                main.Add(container);
+            }
         }
     }
 }

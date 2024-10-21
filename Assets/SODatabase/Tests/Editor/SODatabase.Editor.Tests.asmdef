@@ -1,0 +1,22 @@
+{
+    "name": "SODatabase.Editor.Tests",
+    "rootNamespace": "SODatabase.Editor.Tests",
+    "references": [
+        "GUID:9f2f29438888aff47805c27fdb7ff16b",
+        "GUID:1d13c9f5008662345a86a39ed5ce1637",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

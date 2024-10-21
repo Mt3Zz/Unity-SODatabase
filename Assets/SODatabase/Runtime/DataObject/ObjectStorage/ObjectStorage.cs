@@ -119,7 +119,7 @@ namespace SODatabase.DataObject
             private List<BaseObject> _organizedList = new();
             internal void UpdateOrganizedList(List<BaseObject> source = null)
             {
-                if(source == null) source = _organizedList;
+                if (source == null) source = _organizedList;
                 _organizedList = source
                     .Where(obj => TypeFilter == typeof(BaseObject) || obj.GetType() == TypeFilter)
                     .Where(obj => string.IsNullOrEmpty(NameFilter) || obj.Id.Name.Contains(NameFilter))
@@ -129,11 +129,6 @@ namespace SODatabase.DataObject
 
             internal string NameFilter { get; set; } ="";
             internal Type TypeFilter { get; set; } = typeof(BaseObject);
-            internal void InitFilter()
-            {
-                NameFilter = string.Empty;
-                TypeFilter = typeof(BaseObject);
-            }
 
 
             internal List<BaseObject> Distinct(List<BaseObject> source)
@@ -231,9 +226,9 @@ namespace SODatabase.DataObject
             }
         }
 
-        internal void InitFilterForEditor()
+        internal void InitFilterForEditor(bool targetsTrashedObjects = false)
         {
-            _organizerForEditor.InitFilter();
+            SetFilterForEditor(string.Empty, typeof(BaseObject), targetsTrashedObjects);
         }
         internal void SetFilterForEditor(string nameFilter = null, Type typeFilter = null, bool targetsTrashedObjects = false)
         {

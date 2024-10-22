@@ -234,7 +234,7 @@ namespace SODatabase.Editor
                     {
                         //Debug.Log($"Object Type : {obj.GetType()}\nName : {obj.name}");
                         //obj.Restore();
-                        _target.Objects.Add(obj);
+                        _target.AppendObject(obj);
                     }
                 }
             };

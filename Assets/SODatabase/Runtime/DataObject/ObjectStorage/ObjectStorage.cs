@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,13 +14,14 @@ namespace SODatabase.DataObject
 {
     public class ObjectStorage : ScriptableObject
     {
-        public IList<BaseObject> Objects => _objects;
+        public ReadOnlyCollection<BaseObject> Objects => _objects.AsReadOnly();
         [SerializeField]
         private List<BaseObject> _objects = new();
-        internal IList<BaseObject> TrashedObjects => _trashedObjects;
+        internal IReadOnlyList<BaseObject> TrashedObjects => _trashedObjects;
         [SerializeField]
         private List<BaseObject> _trashedObjects = new();
 
+        /*/
         internal IList<BaseObject> DuplicatedObjects
         {
             get
@@ -30,6 +33,7 @@ namespace SODatabase.DataObject
                     .ToList();
             }
         }
+        //*/
 
 
         // Preferences
@@ -37,6 +41,12 @@ namespace SODatabase.DataObject
         private StoragePreferences _preferences = new();
 
 
+        // Add an object
+        internal void AppendObject(BaseObject obj)
+        {
+            if (obj == null) return;
+            _objects.Add(obj);
+        }
         // Read an object by its ID
         public BaseObject ReadObject(ObjectId id)
         {
@@ -56,7 +66,7 @@ namespace SODatabase.DataObject
             if (isUpdated) return true;
             return false;
         }
-
+        
 
 #if UNITY_EDITOR
         // Create a new object and add it to the storage

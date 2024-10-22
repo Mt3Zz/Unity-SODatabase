@@ -7,6 +7,7 @@ namespace SODatabase.Editor.Tests.DataObject
 {
     using SODatabase.DataObject;
 
+
     public class ObjectStorageEditorTest
     {
         private IntObject _obj = default;
@@ -35,7 +36,7 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
+            storage.AppendObject(_obj);
 
 
             // Act
@@ -52,7 +53,7 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
+            storage.AppendObject(_obj);
 
 
             // Act
@@ -71,7 +72,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
 
 
             // Act
@@ -88,7 +90,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
 
 
             // Act
@@ -107,7 +110,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
 
 
             // Act
@@ -124,7 +128,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
 
 
             // Act
@@ -143,7 +148,7 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
+            storage.AppendObject(_obj);
 
 
             // Act
@@ -159,7 +164,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
 
 
             // Act
@@ -177,8 +183,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_obj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_obj);
+
+            Assert.That(storage.Objects, Has.Count.EqualTo(2).And.Contains(_obj));
 
 
             // Act
@@ -194,8 +202,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_anotherObj);
+
+            Assert.That(storage.Objects, Has.Count.EqualTo(2).And.Contains(_obj));
 
 
             // Act
@@ -211,8 +221,12 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_obj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+
+            Assert.That(storage.TrashedObjects, Has.Count.EqualTo(2).And.Contains(_obj));
 
 
             // Act
@@ -228,8 +242,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_anotherObj);
+            storage.DeleteObjectForEditor(_anotherObj);
 
 
             // Act
@@ -247,8 +263,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_anotherObj);
 
             var expected = new List<BaseObject> { _obj, _anotherObj };
             expected = expected.OrderBy(item => item.Id.Name).ToList();
@@ -267,8 +283,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_anotherObj);
+            storage.DeleteObjectForEditor(_anotherObj);
 
             var tmp = new List<BaseObject> { _obj, _anotherObj };
             var expected = tmp.OrderBy(item => item.Id.Name).ToList();
@@ -289,8 +307,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_anotherObj);
 
             var expected = new List<BaseObject> { _obj, _anotherObj };
             expected = expected.OrderBy(item => item.GetType().Name).ToList();
@@ -309,8 +327,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_anotherObj);
+            storage.DeleteObjectForEditor(_anotherObj);
 
             var tmp = new List<BaseObject> { _obj, _anotherObj };
             var expected = tmp.OrderBy(item => item.GetType().Name).ToList();
@@ -331,8 +351,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_anotherObj);
 
             var expected = new List<BaseObject> { _obj, _anotherObj };
             expected = expected.OrderBy(item => item.name).ToList();
@@ -352,8 +372,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_anotherObj);
+            storage.DeleteObjectForEditor(_anotherObj);
 
             var tmp = new List<BaseObject> { _obj, _anotherObj };
             var expected = tmp.OrderBy(item => item.name).ToList();
@@ -374,8 +396,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_anotherObj);
 
 
             // Act
@@ -390,8 +412,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_anotherObj);
+            storage.DeleteObjectForEditor(_anotherObj);
 
 
             // Act
@@ -408,8 +432,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_anotherObj);
 
 
             // Act
@@ -424,8 +448,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_anotherObj);
 
 
             // Act
@@ -440,8 +464,8 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(_obj);
-            storage.Objects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.AppendObject(_anotherObj);
 
 
             // Act
@@ -456,8 +480,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_anotherObj);
+            storage.DeleteObjectForEditor(_anotherObj);
 
 
             // Act
@@ -472,8 +498,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_anotherObj);
+            storage.DeleteObjectForEditor(_anotherObj);
 
 
             // Act
@@ -488,8 +516,10 @@ namespace SODatabase.Editor.Tests.DataObject
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.TrashedObjects.Add(_obj);
-            storage.TrashedObjects.Add(_anotherObj);
+            storage.AppendObject(_obj);
+            storage.DeleteObjectForEditor(_obj);
+            storage.AppendObject(_anotherObj);
+            storage.DeleteObjectForEditor(_anotherObj);
 
 
             // Act

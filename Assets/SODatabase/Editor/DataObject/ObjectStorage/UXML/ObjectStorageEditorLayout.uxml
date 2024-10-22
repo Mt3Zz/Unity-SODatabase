@@ -21,13 +21,13 @@
         <ui:VisualElement name="footer" class="footer">
             <ui:VisualElement name="controller-section" style="flex-direction: row;">
                 <ui:VisualElement name="object-appender-section" class="card controller-section__item">
-                    <ui:Label text="Add Record" class="card__title" />
+                    <ui:Label text="Append Record" class="card__title" />
                     <ui:VisualElement class="card__item" style="flex-direction: row;">
                         <ui:Button text="Create" name="object-appender-section__object-creater" style="flex-grow: 1;" />
                         <ui:Label text="New" style="align-self: center;" />
                         <ui:DropdownField name="object-appender-section__type-selector" style="flex-grow: 1;" />
                     </ui:VisualElement>
-                    <ui:Button text="Add Existing Record" name="object-appender-section__existing-object-appender" class="card__item" />
+                    <ui:Button text="Append Existing Record" name="object-appender-section__existing-object-appender" class="card__item" />
                 </ui:VisualElement>
                 <ui:VisualElement name="filter-section" class="card controller-section__item controller-section__item--large">
                     <ui:Label text="Filter" class="card__title" />

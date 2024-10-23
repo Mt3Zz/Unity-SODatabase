@@ -10,25 +10,29 @@ namespace SODatabase.Editor
 
     internal class StorageItemViewFacade
     {
-        internal BaseObject BindingObject { get; set; }
-        internal bool IsTrashedItem { get; set; } = false;
-
-        internal Action OnTrashButtonClicked { get; set; } = () => { };
-        internal Action OnRestoreButtonClicked { get; set; } = () => { };
-        internal Action OnDeleteButtonClicked { get; set; } = () => { };
+        internal Action<BaseObject> OnTrashButtonClicked { get; set; } = (obj) => { };
+        internal Action<BaseObject> OnRestoreButtonClicked { get; set; } = (obj) => { };
+        internal Action<BaseObject> OnDeleteButtonClicked { get; set; } = (obj) => { };
 
 
         private StorageItemView _view;
 
 
-        public void SetupItem(VisualElement item)
+        internal StorageItemViewFacade()
         {
-            if (BindingObject == null) return;
-            _view = new(IsTrashedItem);
+            _view = new();
+        }
 
-            CacheVisualElements(item);
+
+        public void InitItem(VisualElement element)
+        {
+            CacheVisualElements(element);
             SetupVisualElements();
             PopulateVisualElements();
+        }
+        public void UpdateItem(BaseObject obj, bool isTrashedItem)
+        {
+            UpdateVisualElements(obj, isTrashedItem);
         }
 
 
@@ -43,7 +47,7 @@ namespace SODatabase.Editor
         private Button        detailsSection__restoreButton;
         private Button        detailsSection__deleteButton;
 
-        internal void CacheVisualElements(VisualElement root)
+        private void CacheVisualElements(VisualElement root)
         {
             T FindOrCreate<T>(VisualElement container, string name)
                 where T : VisualElement, new()
@@ -75,42 +79,57 @@ namespace SODatabase.Editor
         private void SetupVisualElements()
         {
             // Setup
-            _view.SetupDetailsSectionLink(detailsSection__link);
-            _view.SetupDetailsSectionTrashButton(detailsSection__trashButton);
-            _view.SetupDetailsSectionRestoreButton(detailsSection__restoreButton);
-            _view.SetupDetailsSectionDeleteButton(detailsSection__deleteButton);
+            _view.SetupLink(detailsSection__link);
 
             // Associate
-            _view.AssociateDetailsSection__LinkWithTitleSection(
+            _view.AssociateLinkWithTitleSection(
                 detailsSection__link,
                 detailsSection__titleSection
             );
-            _view.AssociateDetailsSection__LinkWithMain(
+            _view.AssociateLinkWithMain(
                 detailsSection__link,
                 detailsSection__main
+            );
+            _view.AssociateLinkWithButton(
+                detailsSection__link,
+                detailsSection__trashButton
+            );
+            _view.AssociateLinkWithButton(
+                detailsSection__link,
+                detailsSection__deleteButton
+            );
+            _view.AssociateLinkWithButton(
+                detailsSection__link,
+                detailsSection__restoreButton
             );
         }
         private void PopulateVisualElements()
         {
             // Populate
-            _view.PopulateDetailsSection__Link(
-                detailsSection__link, 
-                BindingObject
-            );
-            
             _view.PopulateButtonWithAction(
-                detailsSection__trashButton, 
+                detailsSection__trashButton,
                 OnTrashButtonClicked
             );
             _view.PopulateButtonWithAction(
-                detailsSection__restoreButton, 
+                detailsSection__restoreButton,
                 OnRestoreButtonClicked
             );
             _view.PopulateButtonWithAction(
-                detailsSection__deleteButton, 
+                detailsSection__deleteButton,
                 OnDeleteButtonClicked
             );
         }
+        private void UpdateVisualElements(BaseObject obj, bool isTrashedItem)
+        {
+            // Populate
+            _view.PopulateLink(
+                detailsSection__link,
+                obj
+            );
 
+            _view.DisplayNormalModeButton(detailsSection__trashButton, isTrashedItem);
+            _view.DisplayTrashBoxModeButton(detailsSection__restoreButton, isTrashedItem);
+            _view.DisplayTrashBoxModeButton(detailsSection__deleteButton, isTrashedItem);
+        }
     }
 }

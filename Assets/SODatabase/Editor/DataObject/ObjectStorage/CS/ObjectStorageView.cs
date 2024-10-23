@@ -14,7 +14,7 @@ namespace SODatabase.Editor
 
     internal class ObjectStorageView
     {
-        private ObjectStorage _target;
+        private ObjectStorage _storage;
         private VisualTreeAsset _itemLayout;
 
 
@@ -34,7 +34,7 @@ namespace SODatabase.Editor
 
         public ObjectStorageView(ObjectStorage target, VisualTreeAsset itemLayout)
         {
-            _target = target;
+            _storage = target;
             _itemLayout = itemLayout;
 
 
@@ -51,7 +51,7 @@ namespace SODatabase.Editor
         // Title Section
         public void SetupTitleSection__Title(Label label)
         {
-            label.text = _target.name;
+            label.text = _storage.name;
         }
 
 
@@ -64,7 +64,7 @@ namespace SODatabase.Editor
 
         // Object Section
         private bool _targetsTrashedObjects = false;
-        private DisplayedListType _listType;
+        private StorageItemViewFacade _itemViewFacade = new();
         private enum DisplayedListType
         {
             RecordList,
@@ -72,60 +72,62 @@ namespace SODatabase.Editor
         }
         public void SetupObjectSection__list(ListView objectList)
         {
-            _target.InitOrganizerForEditor();
+            _storage.UpdateOrganizedListForEditor();
+            
 
-            objectList.bindingPath = "_organizerForEditor._organizedList";
-            objectList.makeItem = _itemLayout.Instantiate;
-
-            RebuildObjectSection__list(objectList);
-        }
-        private void RebuildObjectSection__list(ListView objectList)
-        {
-            objectList.bindItem = (element, index) =>
+            _itemViewFacade.OnTrashButtonClicked = (obj) =>
             {
-                var obj = _target.OrganizedListForEditor[index];
-
-                var itemFacade = new StorageItemViewFacade();
-                itemFacade.BindingObject = obj;
-                itemFacade.IsTrashedItem = _targetsTrashedObjects;
-                itemFacade.OnTrashButtonClicked = () =>
+                if (_storage.Objects.Contains(obj))
                 {
-                    if (_target.Objects.Contains(obj))
-                    {
-                        //Debug.Log($"{obj.name} is trashed");
-                        _target.DistinctForEditor();
-                        _target.DeleteObjectForEditor(obj);
-                    }
-                    _target.InitOrganizerForEditor(_targetsTrashedObjects);
-                };
-                itemFacade.OnRestoreButtonClicked = () =>
+                    //Debug.Log($"{obj.name} is trashed");
+                    _storage.DistinctForEditor();
+                    _storage.DeleteObjectForEditor(obj);
+                }
+                _storage.UpdateOrganizedListForEditor(_targetsTrashedObjects);
+                objectList.Rebuild();
+                objectList.RefreshItems();
+            };
+            _itemViewFacade.OnRestoreButtonClicked = (obj) =>
+            {
+                if (_storage.TrashedObjects.Contains(obj))
                 {
-                    if (_target.TrashedObjects.Contains(obj))
-                    {
-                        //Debug.Log($"{obj.name} is restored");
-                        _target.DistinctForEditor(true);
-                        _target.RestoreTrashedObjectForEditor(obj);
-                    }
-                    _target.InitOrganizerForEditor(_targetsTrashedObjects);
-                };
-                itemFacade.OnDeleteButtonClicked = () =>
+                    //Debug.Log($"{obj.name} is restored");
+                    _storage.DistinctForEditor(true);
+                    _storage.RestoreTrashedObjectForEditor(obj);
+                }
+                _storage.UpdateOrganizedListForEditor(_targetsTrashedObjects);
+                objectList.Rebuild();
+                objectList.RefreshItems();
+            };
+            _itemViewFacade.OnDeleteButtonClicked = (obj) =>
+            {
+                if (_storage.TrashedObjects.Contains(obj))
                 {
-                    if (_target.TrashedObjects.Contains(obj))
-                    {
-                        //Debug.Log($"{obj.name} is deleted");
-                        _target.DistinctForEditor(true);
-                        _target.RemoveTrashedObjectForEditor(obj);
-                    }
-                    _target.InitOrganizerForEditor(_targetsTrashedObjects);
-                };
-
-
-                itemFacade.SetupItem(element);
+                    //Debug.Log($"{obj.name} is deleted");
+                    _storage.DistinctForEditor(true);
+                    _storage.RemoveTrashedObjectForEditor(obj);
+                }
+                _storage.UpdateOrganizedListForEditor(_targetsTrashedObjects);
+                objectList.Rebuild();
+                objectList.RefreshItems();
             };
 
 
-            objectList.Rebuild();
-            objectList.RefreshItems();
+            objectList.bindingPath = "_organizerForEditor._organizedList";
+            objectList.makeItem = () =>
+            {
+                var root = _itemLayout.Instantiate();
+                _itemViewFacade.InitItem(root);
+                return root;
+            };
+            objectList.bindItem = (element, index) =>
+            {
+                if(0 <= index && index < _storage.OrganizedListForEditor.Count)
+                {
+                    var obj = _storage.OrganizedListForEditor[index];
+                    _itemViewFacade.UpdateItem(obj, _targetsTrashedObjects);
+                }
+            };
         }
         public void AssociateObjectSection__listSelectorWithList
             (EnumField listSelector, ListView objectList)
@@ -144,8 +146,9 @@ namespace SODatabase.Editor
                         throw new ArgumentException($"Unknown enum value: {evt.newValue}.");
                 }
 
-                _target.InitOrganizerForEditor(_targetsTrashedObjects);
-                RebuildObjectSection__list(objectList);
+                _storage.UpdateOrganizedListForEditor(_targetsTrashedObjects);
+                objectList.Rebuild();
+                objectList.RefreshItems();
             });
         }
         public void PopulateObjectSection__listSelector(EnumField listSelector)
@@ -185,7 +188,7 @@ namespace SODatabase.Editor
         public void SetupObjectAppenderSection__ObjectCreater(Button button)
         {
             var folderPreferences = PackagePreferences.instance.FolderPreferences;
-            var folderPath = folderPreferences.ItemFolder + $"/{_target.name}";
+            var folderPath = folderPreferences.ItemFolder + $"/{_storage.name}";
 
 
             button.SetEnabled(false);
@@ -204,14 +207,14 @@ namespace SODatabase.Editor
 
                 if (!string.IsNullOrEmpty(path))
                 {
-                    _target.CreateObjectForEditor(_selectedType, path);
+                    _storage.CreateObjectForEditor(_selectedType, path);
                 }
             };
         }
         public void SetupObjectAppenderSection__ExistingObjectAppender(Button button)
         {
             var folderPreferences = PackagePreferences.instance.FolderPreferences;
-            var folderPath = folderPreferences.ItemFolder + $"/{_target.name}";
+            var folderPath = folderPreferences.ItemFolder + $"/{_storage.name}";
 
 
             button.clicked += () =>
@@ -234,7 +237,7 @@ namespace SODatabase.Editor
                     {
                         //Debug.Log($"Object Type : {obj.GetType()}\nName : {obj.name}");
                         //obj.Restore();
-                        _target.AppendObject(obj);
+                        _storage.AppendObject(obj);
                     }
                 }
             };
@@ -268,13 +271,13 @@ namespace SODatabase.Editor
 
 
             typeFilter.index = 0;
-            _target.SetFilterForEditor(typeFilter: typeof(BaseObject));
+            _storage.SetFilterForEditor(typeFilter: typeof(BaseObject));
 
         }
         public void SetupFilterSection__NameFilter(TextField nameFilter)
         {
             nameFilter.value = "";
-            _target.SetFilterForEditor(nameFilter: "");
+            _storage.SetFilterForEditor(nameFilter: "");
 
         }
         public void SetupFilterSection__NameFilterType(EnumField nameFilterType)
@@ -319,13 +322,13 @@ namespace SODatabase.Editor
                 switch (_currentSortType)
                 {
                     case SortType.Name:
-                        _target.SortByNameForEditor(_targetsTrashedObjects);
+                        _storage.SortByNameForEditor(_targetsTrashedObjects);
                         break;
                     case SortType.Type:
-                        _target.SortByTypeForEditor(_targetsTrashedObjects);
+                        _storage.SortByTypeForEditor(_targetsTrashedObjects);
                         break;
                     case SortType.AssetName:
-                        _target.SortByAssetNameForEditor(_targetsTrashedObjects);
+                        _storage.SortByAssetNameForEditor(_targetsTrashedObjects);
                         break;
                     default:
                         throw new System.ArgumentException($"Unknown enum value: {_currentSortType}.");
@@ -344,7 +347,7 @@ namespace SODatabase.Editor
         {
             distinctButton.clicked += () =>
             {
-                _target.DistinctForEditor(_targetsTrashedObjects);
+                _storage.DistinctForEditor(_targetsTrashedObjects);
             };
         }
 
@@ -355,7 +358,7 @@ namespace SODatabase.Editor
         {
             button.clicked += () =>
             {
-                _target.InitOrganizerForEditor(_targetsTrashedObjects);
+                _storage.UpdateOrganizedListForEditor(_targetsTrashedObjects);
 
                 objectList.Rebuild();
                 objectList.RefreshItems();
@@ -370,15 +373,17 @@ namespace SODatabase.Editor
                 if (index >= 0 && index < _classAndSubclasses.Count)
                 {
                     var typeFilter = _classAndSubclasses[index];
-                    _target.SetFilterForEditor(typeFilter: typeFilter);
+                    _storage.SetFilterForEditor(typeFilter: typeFilter);
                 }
                 else
                 {
-                    _target.SetFilterForEditor(typeFilter: typeof(BaseObject));
+                    _storage.SetFilterForEditor(typeFilter: typeof(BaseObject));
                 }
 
 
-                RebuildObjectSection__list(objectList);
+                _storage.UpdateOrganizedListForEditor(_targetsTrashedObjects);
+                objectList.Rebuild();
+                objectList.RefreshItems();
             });
         }
         public void AssociateFilterSectionWithObjectSection__NameFilterWithList
@@ -386,9 +391,12 @@ namespace SODatabase.Editor
         {
             textField.RegisterValueChangedCallback(evt =>
             {
-                _target.SetFilterForEditor(nameFilter: evt.newValue);
+                _storage.SetFilterForEditor(nameFilter: evt.newValue);
 
-                RebuildObjectSection__list(objectList);
+
+                _storage.UpdateOrganizedListForEditor(_targetsTrashedObjects);
+                objectList.Rebuild();
+                objectList.RefreshItems();
             });
         }
     }

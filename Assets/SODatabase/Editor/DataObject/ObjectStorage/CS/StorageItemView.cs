@@ -10,58 +10,16 @@ namespace SODatabase.Editor
 
     internal class StorageItemView
     {
-        private bool _isTrashedItem;
-
-
-        internal StorageItemView(bool isTrashedObject = false)
-        {
-            _isTrashedItem = isTrashedObject;
-        }
-
-
-        internal void SetupDetailsSectionLink(ObjectField field)
+        internal void SetupLink(ObjectField field)
         {
             field.SetEnabled(false);
         }
-        internal void SetupDetailsSectionTrashButton(Button button)
-        {
-            if (_isTrashedItem)
-            {
-                button.style.display = DisplayStyle.None;
-            }
-            else
-            {
-                button.style.display = DisplayStyle.Flex;
-            }
-        }
-        internal void SetupDetailsSectionRestoreButton(Button button)
-        {
-            if (_isTrashedItem)
-            {
-                button.style.display = DisplayStyle.Flex;
-            }
-            else
-            {
-                button.style.display = DisplayStyle.None;
-            }
-        }
-        internal void SetupDetailsSectionDeleteButton(Button button)
-        {
-            if (_isTrashedItem)
-            {
-                button.style.display = DisplayStyle.Flex;
-            }
-            else
-            {
-                button.style.display = DisplayStyle.None;
-            }
-        }
 
-        internal void AssociateDetailsSection__LinkWithTitleSection
-            (ObjectField link, VisualElement titleSection)
+        internal void AssociateLinkWithTitleSection(ObjectField link, VisualElement titleSection)
         {
             link.RegisterValueChangedCallback(evt =>
             {
+                titleSection.Clear();
                 if (evt.newValue is BaseObject obj && obj != null)
                 {
                     var container = new InspectorElement(obj);
@@ -79,13 +37,11 @@ namespace SODatabase.Editor
                         return; 
                     }
 
-                    titleSection.Clear();
                     titleSection.Add(objTitleField);
                 }
             });
         }
-        internal void AssociateDetailsSection__LinkWithMain
-            (ObjectField link, VisualElement main)
+        internal void AssociateLinkWithMain(ObjectField link, VisualElement main)
         {
             link.RegisterValueChangedCallback(evt =>
             {
@@ -106,15 +62,54 @@ namespace SODatabase.Editor
                 }
             });
         }
-
-        internal void PopulateDetailsSection__Link(ObjectField link, BaseObject obj)
+        internal void AssociateLinkWithButton(ObjectField link, Button button)
         {
-            //link.value = _target.Objects[index];
+            link.RegisterValueChangedCallback(evt =>
+            {
+                if (evt.newValue is BaseObject obj && obj != null)
+                {
+                    button.userData = obj;
+                }
+                else
+                {
+                    button.userData = null;
+                }
+            }); 
+        }
+
+        internal void PopulateLink(ObjectField link, BaseObject obj)
+        {
             link.value = obj;
         }
-        internal void PopulateButtonWithAction(Button button, Action onButtonClicked)
+        internal void PopulateButtonWithAction(Button button, Action<BaseObject> onButtonClicked)
         {
-            button.clicked += onButtonClicked;
+            button.clicked += () =>
+            {
+                onButtonClicked(button.userData as BaseObject);
+            };
+        }
+
+        internal void DisplayNormalModeButton(Button button, bool isTrashedItem = false)
+        {
+            if (isTrashedItem)
+            {
+                button.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                button.style.display = DisplayStyle.Flex;
+            }
+        }
+        internal void DisplayTrashBoxModeButton(Button button, bool isTrashedItem = true)
+        {
+            if (isTrashedItem)
+            {
+                button.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                button.style.display = DisplayStyle.None;
+            }
         }
     }
 }

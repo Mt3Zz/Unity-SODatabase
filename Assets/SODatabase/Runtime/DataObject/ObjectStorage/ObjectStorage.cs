@@ -118,13 +118,13 @@ namespace SODatabase.DataObject
         }
 
 
-        internal IList<BaseObject> OrganizedListForEditor => _organizerForEditor.OrganizedList;
+        internal IReadOnlyList<BaseObject> OrganizedListForEditor => _organizerForEditor.OrganizedList;
         [SerializeField]
         private StorageOrganizer _organizerForEditor = new();
         [Serializable]
         private class StorageOrganizer
         {
-            internal IList<BaseObject> OrganizedList => _organizedList;
+            internal IReadOnlyList<BaseObject> OrganizedList => _organizedList;
             [SerializeField]
             private List<BaseObject> _organizedList = new();
             internal void UpdateOrganizedList(List<BaseObject> source = null)
@@ -179,7 +179,7 @@ namespace SODatabase.DataObject
                 return result;
             }
         }
-        internal void InitOrganizerForEditor(bool targetsTrashedObjects = false)
+        internal void UpdateOrganizedListForEditor(bool targetsTrashedObjects = false)
         {
             if (targetsTrashedObjects)
             {

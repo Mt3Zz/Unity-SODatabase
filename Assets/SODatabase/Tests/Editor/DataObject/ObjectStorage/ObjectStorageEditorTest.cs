@@ -152,7 +152,7 @@ namespace SODatabase.Editor.Tests.DataObject
 
 
             // Act
-            storage.InitOrganizerForEditor();
+            storage.UpdateOrganizedListForEditor();
 
 
             // Assert
@@ -169,7 +169,7 @@ namespace SODatabase.Editor.Tests.DataObject
 
 
             // Act
-            storage.InitOrganizerForEditor(targetsTrashedObjects : true);
+            storage.UpdateOrganizedListForEditor(targetsTrashedObjects : true);
 
 
             // Assert

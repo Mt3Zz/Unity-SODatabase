@@ -5,3 +5,6 @@
 
 // エディターからInternal Classへアクセスすることを許可
 [assembly: InternalsVisibleTo("SODatabase.Editor")]
+
+// エディターテストからInternal Classへアクセスすることを許可
+[assembly: InternalsVisibleTo("SODatabase.Editor.Tests")]

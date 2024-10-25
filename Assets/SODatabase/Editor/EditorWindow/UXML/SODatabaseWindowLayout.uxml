@@ -8,8 +8,6 @@
                 <ui:Button text="Preferences" name="footer__preferences-link" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:ScrollView name="main" horizontal-scroller-visibility="Hidden" class="main--flex-grow main--margin">
-            <ui:Label text="No sidebar content selected" />
-        </ui:ScrollView>
+        <ui:VisualElement name="main" style="flex-grow: 1;" />
     </ui:VisualElement>
 </ui:UXML>

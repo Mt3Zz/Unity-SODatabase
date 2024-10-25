@@ -1,17 +1,60 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <ui:ScrollView horizontal-scroller-visibility="Hidden" name="main" style="flex-grow: 1;">
-        <ui:VisualElement name="preference-section">
-            <ui:DropdownField label="Object Type" index="0" name="preference-section__type-selector" />
-        </ui:VisualElement>
-        <ui:VisualElement name="object-section">
-            <ui:ListView show-bound-collection-size="false" virtualization-method="DynamicHeight" name="object-section__list" binding-path="_objects" show-add-remove-footer="true" />
-            <ui:VisualElement style="flex-direction: row;">
-                <ui:DropdownField name="object-section__type-selector" />
-                <ui:Button text="Create New Object" name="object-section__object-creater" />
+    <ui:VisualElement name="root" class="root">
+        <ui:VisualElement name="header" class="header">
+            <ui:VisualElement name="title-section">
+                <ui:Label text="Title" name="title-section__title" class="title-section__title--text header__title" />
+            </ui:VisualElement>
+            <ui:VisualElement name="preference-section" style="display: none;">
+                <ui:DropdownField label="Object Type" index="0" name="preference-section__type-selector" />
             </ui:VisualElement>
         </ui:VisualElement>
-        <ui:VisualElement name="default-inspector-section">
-            <ui:Foldout text="Default Inspector" name="default-inspector-section__foldout" value="false" style="display: none;" />
+        <ui:VisualElement name="main" class="main--flex-grow main--padding main">
+            <ui:VisualElement name="object-section">
+                <ui:VisualElement style="flex-shrink: 0; flex-direction: row;">
+                    <ui:EnumField name="object-section__list-selector" class="object-section__list-selector" />
+                </ui:VisualElement>
+                <ui:ScrollView horizontal-scroller-visibility="Hidden">
+                    <ui:ListView show-bound-collection-size="false" virtualization-method="DynamicHeight" name="object-section__list" binding-path="_organizerForEditor._organizedList" />
+                </ui:ScrollView>
+            </ui:VisualElement>
         </ui:VisualElement>
-    </ui:ScrollView>
+        <ui:VisualElement name="footer" class="footer">
+            <ui:VisualElement name="controller-section" style="flex-direction: row;">
+                <ui:VisualElement name="object-appender-section" class="card controller-section__item">
+                    <ui:Label text="Append Record" class="card__title" />
+                    <ui:VisualElement class="card__item" style="flex-direction: row;">
+                        <ui:Button text="Create" name="object-appender-section__object-creater" style="flex-grow: 1;" />
+                        <ui:Label text="New" style="align-self: center;" />
+                        <ui:DropdownField name="object-appender-section__type-selector" style="flex-grow: 1;" />
+                    </ui:VisualElement>
+                    <ui:Button text="Append Existing Record" name="object-appender-section__existing-object-appender" class="card__item" />
+                </ui:VisualElement>
+                <ui:VisualElement name="filter-section" class="card controller-section__item controller-section__item--large">
+                    <ui:Label text="Filter" class="card__title" />
+                    <ui:VisualElement class="card__item">
+                        <ui:DropdownField label="Record Type" name="filter-section__type-filter" />
+                        <ui:VisualElement style="flex-direction: row;">
+                            <ui:EnumField label="Name" name="filter-section__name-filter-type" />
+                            <ui:TextField name="filter-section__name-filter" style="flex-grow: 1;" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="card__item" style="flex-direction: row;">
+                        <ui:Button text="Clear Filters" name="filter-section__filter-cleaner" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="list-organizer-section" class="card controller-section__item">
+                    <ui:Label text="Organize List" class="card__title" />
+                    <ui:VisualElement class="card__item" style="flex-direction: row;">
+                        <ui:Button text="Sort" name="list-organizer-section__sort" style="flex-grow: 1;" />
+                        <ui:Label text="by" style="align-self: center;" />
+                        <ui:EnumField name="list-organizer-section__sort-type-selector" style="flex-grow: 1;" />
+                    </ui:VisualElement>
+                    <ui:Button text="Distinct" name="list-organizer-section__distinct" class="card__item" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="default-inspector-section">
+                <ui:Foldout text="Default Inspector" name="default-inspector-section__foldout" value="false" style="display: none;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
 </ui:UXML>

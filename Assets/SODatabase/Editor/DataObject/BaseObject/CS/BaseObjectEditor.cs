@@ -1,3 +1,4 @@
+using System.Text;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -18,42 +19,132 @@ namespace SODatabase.Editor
 
         public override VisualElement CreateInspectorGUI()
         {
+            //ShowPropertyNames();
+
+
             var root = new VisualElement();
             if (_layout != null)
             {
                 _layout.CloneTree(root);
             }
 
-
-            CreateDefaultInspector(root);
-            CreateDatabaseInformation(root);
-
+            CacheVisualElements(root);
+            SetupVisualElements();
 
             return root;
         }
 
 
-        private void CreateDefaultInspector(VisualElement root)
+        // VisualElements
+        private VisualElement titleSection;
+        private VisualElement titleSection__iconSection;
+        private VisualElement titleSection__nameSection;
+        private Label         titleSection__placeholderTitle;
+        private TextField     titleSection__placeholder;
+
+        private VisualElement defaultInspectorSection;
+
+        private Foldout       databaseInformationSection;
+
+        private void CacheVisualElements(VisualElement root)
         {
-            var container = root.Q<VisualElement>("default-inspector");
-            if (container == null)
+            T FindElementOrCreate<T>(VisualElement container, string name)
+                where T : VisualElement, new()
             {
-                Debug.Log("default-inspector is null");
-                return;
+                T element = container.Q<T>(name);
+                if (element == null)
+                {
+                    var msg = ""
+                        + $"{name} is null.\n"
+                        + $"A new instance of {typeof(T)} has been created.\n";
+                    Debug.Log(msg);
+                    element = new T();
+                }
+                return element;
             }
 
+
+            titleSection = FindElementOrCreate
+                <VisualElement>(
+                root,
+                "title-section");
+            titleSection__iconSection = FindElementOrCreate
+                <VisualElement>(
+                titleSection,
+                "title-section__icon-section");
+            titleSection__nameSection = FindElementOrCreate
+                <VisualElement>(
+                titleSection,
+                "title-section__name-section");
+            titleSection__placeholderTitle = FindElementOrCreate
+                <Label>(
+                titleSection__nameSection,
+                "title-section__placeholder-title");
+            titleSection__placeholder = FindElementOrCreate
+                <TextField>(
+                titleSection__nameSection,
+                "title-section__placeholder");
+
+
+            defaultInspectorSection = FindElementOrCreate
+                <VisualElement>(
+                root,
+                "default-inspector");
+
+
+            databaseInformationSection = FindElementOrCreate
+                <Foldout>(
+                root,
+                "database-information");
+        }
+        private void SetupVisualElements()
+        {
+            // Setup Title Section
+            SetupTitleSectionIconSection(titleSection__iconSection);
+            SetupTitleSectionPlaceholder(titleSection__placeholder);
+
+            // Setup Default Inspector Section
+            SetupDefaultInspector(defaultInspectorSection);
+
+            // Setup Database Information Section
+            SetupDatabaseInformation(databaseInformationSection);
+        }
+        private void ShowPropertyNames()
+        {
+            StringBuilder msg = new StringBuilder();
+            msg.Append("Property Name List\n");
+
+            var iterator = serializedObject.GetIterator();
+            while (iterator.NextVisible(true))
+            {
+                msg.Append($"- {iterator.propertyPath}\n");
+            }
+            msg.Append("\n");
+            Debug.Log(msg.ToString());
+        }
+
+
+        private void SetupTitleSectionIconSection(VisualElement iconSection)
+        {
+            var pic = (Texture)EditorGUIUtility.Load("ScriptableObject On Icon");
+            var icon = new Image
+            {
+                image = pic
+            };
+            
+            iconSection.Add(icon);
+        }
+        private void SetupTitleSectionPlaceholder(TextField placeholder)
+        {
+            var prop = serializedObject.FindProperty("_id._name");
+            placeholder.BindProperty(prop);
+        }
+        private void SetupDefaultInspector(VisualElement container)
+        {
             InspectorElement.FillDefaultInspector(container, serializedObject, this);
         }
-        private void CreateDatabaseInformation(VisualElement root)
+        private void SetupDatabaseInformation(Foldout foldout)
         {
-            var container = root.Q<Foldout>("database-information");
-            if (container == null)
-            {
-                Debug.Log("database-information is null");
-                return;
-            }
-
-
             var targetInstance = (BaseObject)target;
 
             var uuid = $"Uuid : {targetInstance.Uuid.ToString()}";
@@ -62,11 +153,11 @@ namespace SODatabase.Editor
             var isDeleted = $"Is Deleted : {targetInstance.IsDeleted.ToString()}";
             var version = $"Version : {targetInstance.Version.ToString()}";
 
-            container.Add(new Label(uuid));
-            container.Add(new Label(createdAt));
-            container.Add(new Label(updatedAt));
-            container.Add(new Label(isDeleted));
-            container.Add(new Label(version));
+            foldout.Add(new Label(uuid));
+            foldout.Add(new Label(createdAt));
+            foldout.Add(new Label(updatedAt));
+            foldout.Add(new Label(isDeleted));
+            foldout.Add(new Label(version));
         }
     }
 }

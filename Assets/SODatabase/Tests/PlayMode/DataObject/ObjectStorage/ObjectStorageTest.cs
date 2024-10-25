@@ -34,47 +34,37 @@ namespace SODatabase.Tests.PlayMode.DataObject
 
 
         [Test]
-        public void DuplicatesObjects_SameIds_FindsDuplicatedObject()
+        public void AppendObject_AddObject_ObjectsHasObject()
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-
-            _obj1.SetId(_id);
-            _obj2.SetId(_id);
-
-            storage.Objects.Add(_obj1);
-            storage.Objects.Add(_obj2);
+            _obj.SetId(_id);
 
 
             // Act
-            var duplicates = storage.DuplicatedObjects;
+            storage.AppendObject(_obj);
 
 
             // Assert
-            Assert.That(storage.Objects.Contains(_obj1), Is.True);
-            Assert.That(storage.Objects.Contains(_obj2), Is.True);
+            Assert.That(storage.Objects, Has.Member(_obj));
         }
         [Test]
-        public void DuplicatesObjects_DifferentIds_DoesNotFindDuplicatedObject()
+        public void AppendObject_AddObject_ObjectIsEndOfList()
         {
             // Arrange
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-
             _obj1.SetId(_id1);
             _obj2.SetId(_id2);
 
-            storage.Objects.Add(_obj1);
-            storage.Objects.Add(_obj2);
-
 
             // Act
-            var duplicates = storage.DuplicatedObjects;
+            storage.AppendObject(_obj1);
+            storage.AppendObject(_obj2);
 
 
             // Assert
-            Assert.That(duplicates.Count, Is.EqualTo(0));
-            Assert.That(duplicates.Contains(_obj1), Is.False);
-            Assert.That(duplicates.Contains(_obj2), Is.False);
+            Assert.That(storage.Objects, Has.Member(_obj1).And.Member(_obj2));
+            Assert.That(storage.Objects[^1], Is.EqualTo(_obj2));
         }
 
 
@@ -85,7 +75,7 @@ namespace SODatabase.Tests.PlayMode.DataObject
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
 
             _obj.SetId(_id);
-            storage.Objects.Add(_obj);
+            storage.AppendObject(_obj);
 
 
             // Act
@@ -102,7 +92,7 @@ namespace SODatabase.Tests.PlayMode.DataObject
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
 
             _obj.SetId(_id1);
-            storage.Objects.Add(_obj);
+            storage.AppendObject(_obj);
 
 
             // Act
@@ -118,11 +108,11 @@ namespace SODatabase.Tests.PlayMode.DataObject
         public void UpdateObject_ValidId_SetValueToObject()
         {
             // Arrange
+            var storage = ScriptableObject.CreateInstance<ObjectStorage>();
+
             var obj = ScriptableObject.CreateInstance<TestObject>();
             obj.SetId(_id);
-
-            var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(obj);
+            storage.AppendObject(obj);
 
             var controller = new TestObjectController();
 
@@ -142,11 +132,11 @@ namespace SODatabase.Tests.PlayMode.DataObject
         public void UpdateObject_InvalidId_DoesNotChangeObjectValue()
         {
             // Arrange
-            var obj = ScriptableObject.CreateInstance<TestObject>();
-            obj.SetId(_id1);
-
             var storage = ScriptableObject.CreateInstance<ObjectStorage>();
-            storage.Objects.Add(obj);
+
+            var obj = ScriptableObject.CreateInstance<TestObject>();
+            obj.SetId(_id);
+            storage.AppendObject(obj);
 
             var controller = new TestObjectController();
 

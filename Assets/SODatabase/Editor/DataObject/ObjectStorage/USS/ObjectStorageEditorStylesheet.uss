@@ -67,5 +67,5 @@
 }
 
 .object-section__list-selector {
-    left: 25px;
+    /*left: 25px;*/
 }

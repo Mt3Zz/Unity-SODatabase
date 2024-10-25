@@ -259,9 +259,9 @@ namespace SODatabase.Editor
         private NameFilterType _currentNameFilterType;
         private enum NameFilterType
         {
-            Contains,
-            StartWith,
-            EndWith
+            Contains//,
+            //StartWith,
+            //EndWith
         }
         public void SetupFilterSection__TypeFilter(DropdownField typeFilter)
         {

@@ -33,7 +33,7 @@ namespace SODatabase.Editor
     {
         internal string RootFolder => _rootFolder;
         internal string InitialRootFolder => _initialRootFolder;
-        internal string ItemFolder     => RootFolder + "/Items";
+        internal string ItemFolder     => RootFolder + "/Records";
         internal string TemplateFolder => RootFolder + "/Templates";
         internal string StorageFolder  => RootFolder + "/Storages";
         internal string TypeFolder     => RootFolder + "/Types";

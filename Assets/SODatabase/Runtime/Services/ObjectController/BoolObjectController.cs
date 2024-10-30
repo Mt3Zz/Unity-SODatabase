@@ -1,16 +1,34 @@
-namespace SODatabase.Service
+using UnityEngine;
+
+namespace SODatabase
 {
     using BoolObject = DataObject.BoolObject;
 
-    public sealed class BoolObjectController : DataObject.IObjectController<BoolObject>
-    {
-        public bool InputValue { get; internal set; } = false;
 
+    internal sealed class BoolObjectController : MonoBehaviour, DataObject.IObjectController<BoolObject>
+    {
+        [SerializeField]
+        private BoolObject _target = default;
+
+
+        public bool NewValue
+        {
+            get => _newValue;
+            set => _newValue = value;
+        }
+        [SerializeField]
+        private bool _newValue = false;
+
+
+        public bool UpdateTarget()
+        {
+            return UpdateObject(_target);
+        }
         public bool UpdateObject(BoolObject obj)
         {
             if (obj == null) return false;
 
-            obj.Value = InputValue;
+            obj.Value = NewValue;
             return true;
         }
     }

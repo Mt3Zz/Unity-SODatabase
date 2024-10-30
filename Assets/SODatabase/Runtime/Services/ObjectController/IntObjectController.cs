@@ -1,16 +1,33 @@
-namespace SODatabase.Service
+using UnityEngine;
+
+namespace SODatabase
 {
     using IntObject = DataObject.IntObject;
 
-    public sealed class IntObjectController : DataObject.IObjectController<IntObject>
+    internal sealed class IntObjectController : MonoBehaviour, DataObject.IObjectController<IntObject>
     {
-        public int InputValue { get; set; } = default;
+        [SerializeField]
+        private IntObject _target = default;
 
+
+        public int NewValue
+        {
+            get => _newValue;
+            set => _newValue = value;
+        }
+        [SerializeField]
+        private int _newValue = default;
+
+
+        public bool UpdateTarget()
+        {
+            return UpdateObject(_target);
+        }
         public bool UpdateObject(IntObject obj)
         {
             if (obj == null) return false;
 
-            obj.Value = InputValue;
+            obj.Value = NewValue;
             return true;
         }
     }

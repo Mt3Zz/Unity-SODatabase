@@ -61,10 +61,7 @@ namespace SODatabase.DataObject
             if (obj == null) return false;
             if (obj.GetType() != typeof(T)) return false;
 
-            var isUpdated = controller.Update(obj as T);
-
-            if (isUpdated) return true;
-            return false;
+            return controller.UpdateObject(obj as T);
         }
         
 

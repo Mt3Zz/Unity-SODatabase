@@ -14,6 +14,6 @@ namespace SODatabase.DataObject
         /// <returns>
         /// オブジェクトが正常に更新された場合は <c>true</c>、それ以外の場合は <c>false</c> を返します。
         /// </returns>
-        bool Update(T obj);
+        bool UpdateObject(T obj);
     }
 }

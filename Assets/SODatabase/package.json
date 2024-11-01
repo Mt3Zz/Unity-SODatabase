@@ -5,5 +5,11 @@
     "displayName": "SODatabase",
     "unity": "2022.3",
     "dependencies": {
-    }
+    },
+    "author": {
+      "name": "mt3zz",
+      "url": "https://github.com/Mt3Zz"
+    },
+    "license": "MIT",
+    "documentationUrl": "https://github.com/Mt3Zz/Unity-SODatabase"
   }

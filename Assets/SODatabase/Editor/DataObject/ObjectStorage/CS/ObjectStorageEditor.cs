@@ -38,6 +38,11 @@ namespace SODatabase.Editor
 
             return root;
         }
+        public void OnDisable()
+        {
+            var storage = (ObjectStorage)target;
+            EditorUtility.SetDirty(storage);
+        }
 
 
         // VisualElementフィールドを定義

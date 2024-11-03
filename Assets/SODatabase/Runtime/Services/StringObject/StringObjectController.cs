@@ -1,14 +1,15 @@
+using System;
 using UnityEngine;
 
 namespace SODatabase
 {
-    using StringObject = DataObject.StringObject;
-
-
-    internal sealed class StringObjectController : MonoBehaviour, DataObject.IObjectController<StringObject>
+    [Serializable]
+    public sealed class StringObjectController : DataObject.IObjectController<StringObject>
     {
-        [SerializeField]
-        private StringObject _target = default;
+        public StringObjectController(string newValue)
+        {
+            _newValue = newValue;
+        }
 
 
         public string NewValue 
@@ -20,10 +21,6 @@ namespace SODatabase
         private string _newValue = "";
 
 
-        public bool UpdateTarget()
-        {
-            return UpdateObject(_target);
-        }
         public bool UpdateObject(StringObject obj)
         {
             if (obj == null) return false;

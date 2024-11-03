@@ -1,14 +1,15 @@
+using System;
 using UnityEngine;
 
 namespace SODatabase
 {
-    using FloatObject = DataObject.FloatObject;
-
-
-    internal sealed class FloatObjectController : MonoBehaviour, DataObject.IObjectController<FloatObject>
+    [Serializable]
+    public sealed class FloatObjectController : DataObject.IObjectController<FloatObject>
     {
-        [SerializeField]
-        private FloatObject _target = default;
+        public FloatObjectController(float newValue)
+        {
+            _newValue = newValue;
+        }
 
 
         public float NewValue
@@ -20,10 +21,6 @@ namespace SODatabase
         private float _newValue = default;
 
 
-        public bool UpdateTarget()
-        {
-            return UpdateObject(_target);
-        }
         public bool UpdateObject(FloatObject obj)
         {
             if (obj == null) return false;

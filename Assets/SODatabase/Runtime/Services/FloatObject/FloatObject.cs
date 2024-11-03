@@ -1,15 +1,25 @@
 using UnityEngine;
 
-namespace SODatabase.DataObject
+namespace SODatabase
 {
-    public sealed class FloatObject : BaseObject
+    public sealed class FloatObject : DataObject.BaseObject
     {
         public float Value
         {
-            get { return _value; }
-            internal set { _value = value; }
+            get => _value;
+            set => _value = value;
         }
         [SerializeField]
-        private float _value = 0;
+        private float _value = 0f;
+
+
+        public void Add(float amount)
+        {
+            _value += amount;
+        }
+        public void Substract(float amount)
+        {
+            _value -= amount;
+        }
     }
 }

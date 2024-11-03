@@ -1,15 +1,21 @@
 using UnityEngine;
 
-namespace SODatabase.DataObject
+namespace SODatabase
 {
-    public sealed class StringObject : BaseObject
+    public sealed class StringObject : DataObject.BaseObject
     {
         public string Value
         {
-            get { return _value; }
-            internal set { _value = value; }
+            get => _value;
+            set => _value = value;
         }
         [SerializeField]
         private string _value = "";
+
+
+        public void Append(string suffix)
+        {
+            _value += suffix;
+        }
     }
 }
